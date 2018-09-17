@@ -1,0 +1,31 @@
+Order #:
+What happends when ansking for one and many answers? (1)
+Why does it happend? (2)
+Sketch the SLD tree! (3)
+
+Order 1:
+1)
+2)
+3)
+
+Order 2:
+1)
+2)
+3)
+
+Order 3:
+1)
+2)
+3)
+
+Order 4:
+1)
+2)
+3)
+
+General:
+Which order is the best for the following queries and why?
+1) middle(X, [a, b, c]).
+
+2) middle(a, X).
+
