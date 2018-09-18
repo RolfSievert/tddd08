@@ -1,31 +1,30 @@
 Order #:
-What happends when ansking for one and many answers? (1)
+What happends when asking for one and many answers? (1)
 Why does it happend? (2)
-Sketch the SLD tree! (3)
+Sketch the SLD tree! (3) (in Drive)
+
+Query A and B:
+(A) middle(X, [a, b, c]).
+(B) middle(a, X).
 
 Order 1:
-1)
-2)
-3)
+1) The first (A) query works and the second returns "no". The (B) query returns all possible lists with "a" in the middle, starting at [a].
+2) (A) removes one element of both sides of the list until only one element remains, it then fulfills the halting condition. This order and order 3 are the same as it does not matter which order the middle predicates are placed as they are exclusive. This is because one requires a list of atleast two elements due to the append clause and the other requires a list of exactly one element. (B) adds one element on each side of the current list with "a" in the middle and returns it. Since the middle predicate accepting single element lists is first this can produce the answer [a].
 
 Order 2:
-1)
-2)
-3)
+1) The first (A) query works and the second loop does not return any answer, it loops infinitly. The (B) query returns all possible lists with "a" in the middle, starting at [a].
+2) (A) will look for a solution to the variable Middle. It will test the halting condition first and it will realise that Middle containing one element is not a solution as the resulting list will contain three elements. It will back up and try using three elements in Middle. This will succedd and will return a solution. Any further query will try increasingly large sizes of Middle and fail as they will not return any solutions. (B) adds one element on each side of the current list with "a" in the middle and returns it. Since the middle predicate accepting single element lists is first this can produce the answer [a].
 
 Order 3:
-1)
-2)
-3)
+1) The first (A) query works and the second returns "no". The (B) query returns all possible lists with "a" in the middle, starting at [_A, a, _B].
+2) (A) removes one element of both sides of the list until only one element remains, it then fulfills the halting condition. This order and order 1 are the same as it does not matter which order the middle predicates are placed as they are exclusive. This is because one requires a list of atleast two elements due to the append clause and the other requires a list of exactly one element. (B) adds one element on each side of the current list with "a" in the middle and returns it. Since the middle predicate accepting single element lists is last this can not produce the answer [a].
 
 Order 4:
-1)
-2)
-3)
+1) The first (A) query loops and does not return any answer, it loops infinitly. The (B) query loops infinitly.
+2) (A) will look for a solution to the variable Middle. It will never test the halting condition as it is not reachable and therefore will never find a solution. (B) adds one element on each side of the current list with "a" in the middle and returns it. Since there is no halting condition as the recursion call is first we will never be able to halt.
 
 General:
 Which order is the best for the following queries and why?
-1) middle(X, [a, b, c]).
 
-2) middle(a, X).
-
+(A): Order 1 for lists with length zero or one. Order 3 for all other lengths. This is due to how many times the predicates need to be checked.
+(B): Order 1 and order 2 will produce the same result.
