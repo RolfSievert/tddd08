@@ -1,23 +1,23 @@
 % Order 1
-%middle(X,[X]).
-%middle(X,[_First|Xs]) :-
-%	append(Middle,[_Last],Xs),
-%	middle(X,Middle).
+middle1(X,[X]).
+middle1(X,[_First|Xs]) :-
+	append(Middle,[_Last],Xs),
+	middle1(X,Middle).
 
 % Order 2
-%middle(X,[X]).
-%middle(X,[_First|Xs]) :-
-%	middle(X,Middle),
-%	append(Middle,[_Last],Xs).
+middle2(X,[X]).
+middle2(X,[_First|Xs]) :-
+	middle2(X,Middle),
+	append(Middle,[_Last],Xs).
 
 % Order 3
-%middle(X,[_First|Xs]) :-
-%	append(Middle,[_Last],Xs),
-%	middle(X,Middle).
-%middle(X,[X]).
+middle3(X,[_First|Xs]) :-
+	append(Middle,[_Last],Xs),
+	middle3(X,Middle).
+middle3(X,[X]).
 
 % Order 4
-middle(X,[_First|Xs]) :-
-	middle(X,Middle),
+middle4(X,[_First|Xs]) :-
+	middle4(X,Middle),
 	append(Middle,[_Last],Xs).
-middle(X,[X]).
+middle4(X,[X]).
