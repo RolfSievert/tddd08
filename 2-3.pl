@@ -1,6 +1,8 @@
 % Calculate arithmetic and boolean operations
 calc(_, tt, tt).
 calc(_, ff, ff).
+calc(S0, X, V):-
+    memberchk(X=V, S0).
 calc(S0, id(I), V):-
     memberchk(I=V, S0).
 calc(_, num(A), A).
@@ -41,13 +43,13 @@ execute(S0, set(I, E), Sn) :-
     % If identifier already exists in S0
     memberchk(I=A, S0),
     delete(S0, I=A, S1),
-    sublist(S1, Sn),
     calc(S0, E, V),
-    memberchk(I=V, Sn);
+    append([I=V], S1, Sn).
+execute(S0, set(I, E), Sn) :-
     % If it doesn't exist in S0
     \+memberchk(I=_, S0),
-    sublist(S0, Sn),
-    memberchk(I=E, Sn).
+    calc(S0, E, V),
+    append([I=V], S0, Sn).
 
 % Executes C1 if B, else C2
 execute(S0, if(B, C1, C2), Sn):-
@@ -63,15 +65,13 @@ execute(S0, while(B, C), Sn):-
     calc(S0, B, tt),
     execute(S0, C, S1),
     execute(S1, while(B, C), Sn).
+execute(S0, while(B, _), S0):-
+    calc(S0, B, ff).
 
 % Executes C1 and C2 in that order
 execute(S0, seq(C1, C2), Sn):-
     execute(S0, C1, S1),
     execute(S1, C2, Sn).
 
-%execute([x=3],
-%seq(set(y,num(1)),
-%    while(x > num(1),
-%        seq(set(y, id(y) * id(x)),
-%            set(x, id(x) - num(1)))))
-%,Sn)
+% program
+%execute([], seq(set(y, num(1)), while(x > num(1), seq(set(y, id(y) *id(x)), set(x, id(x) - num(1))))), Sn).
