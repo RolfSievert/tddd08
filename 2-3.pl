@@ -1,6 +1,35 @@
-% Gets the value E of identifier I
-id(E, I, Sn):-
-    memberchk(I=E, Sn).
+% Calculate arithmetic and boolean operations
+calc(_, tt, tt).
+calc(_, ff, ff).
+calc(S0, id(I), V):-
+    memberchk(I=V, S0).
+calc(_, num(A), A).
+calc(_, num(A) < num(B), tt):-
+    calc(_, A, V1),
+    calc(_, B, V2),
+    V1<V2.
+calc(_, num(A) < num(B), ff):-
+    calc(_, A, V1),
+    calc_, B, V2),
+    V1>=V2.
+calc(_, num(A) > num(B), tt):-
+    calc(_, A, V1),
+    calc(_, B, V2),
+    V1>V2.
+calc(_, num(A) > num(B), ff):-
+    calc(_, A, V1),
+    calc_, B, V2),
+    V2>=V1.
+calc(_, A + B, V1+V2):-
+    calc(_, A, V1),
+    calc_, B, V2).
+calc(_, A - B, V1-V2):-
+    calc(_, A, V1),
+    calc_, B, V2).
+calc(_, A * B, V1*V2):-
+    calc(_, A, V1),
+    calc_, B, V2).
+
 
 % Does nothing
 execute(S0, skip, S0).
