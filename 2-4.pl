@@ -45,8 +45,7 @@ insert(X, [H|T], Z):-
     append([L], L1, Z),
     insert(X, T, L1).
 
-power([], U):-
-    U=[[]].
+power([], [[]]).
 power([H|T], U):-
     [H|T]\=[],
     power(T, X),
