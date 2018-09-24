@@ -10,7 +10,7 @@ calc(_, num(A) < num(B), tt):-
     V1<V2.
 calc(_, num(A) < num(B), ff):-
     calc(_, A, V1),
-    calc_, B, V2),
+    calc(_, B, V2),
     V1>=V2.
 calc(_, num(A) > num(B), tt):-
     calc(_, A, V1),
@@ -18,17 +18,17 @@ calc(_, num(A) > num(B), tt):-
     V1>V2.
 calc(_, num(A) > num(B), ff):-
     calc(_, A, V1),
-    calc_, B, V2),
+    calc(_, B, V2),
     V2>=V1.
 calc(_, A + B, V1+V2):-
     calc(_, A, V1),
-    calc_, B, V2).
+    calc(_, B, V2).
 calc(_, A - B, V1-V2):-
     calc(_, A, V1),
-    calc_, B, V2).
+    calc(_, B, V2).
 calc(_, A * B, V1*V2):-
     calc(_, A, V1),
-    calc_, B, V2).
+    calc(_, B, V2).
 
 
 % Does nothing
