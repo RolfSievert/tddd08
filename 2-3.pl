@@ -42,7 +42,8 @@ execute(S0, set(I, E), Sn) :-
     memberchk(I=A, S0),
     delete(S0, I=A, S1),
     sublist(S1, Sn),
-    memberchk(I=E, Sn);
+    calc(S0, E, V),
+    memberchk(I=V, Sn);
     % If it doesn't exist in S0
     \+memberchk(I=_, S0),
     sublist(S0, Sn),
@@ -51,15 +52,15 @@ execute(S0, set(I, E), Sn) :-
 % Executes C1 if B, else C2
 execute(S0, if(B, C1, C2), Sn):-
     % if B is true
-    B,
+    calc(S0, B, tt),
     execute(S0, C1, Sn);
     % if B is false
-    \+B,
+    calc(S0, B, ff),
     execute(S0, C2, Sn).
 
 % Executes C while boolean B is true
 execute(S0, while(B, C), Sn):-
-    B,
+    calc(S0, B, tt),
     execute(S0, C, S1),
     execute(S1, while(B, C), Sn).
 
