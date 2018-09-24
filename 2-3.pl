@@ -73,4 +73,4 @@ execute(S0, seq(C1, C2), Sn):-
 %    while(x > num(1),
 %        seq(set(y, id(y) * id(x)),
 %            set(x, id(x) - num(1)))))
-%,Sn)
+%,Sn).
