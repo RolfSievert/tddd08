@@ -4,33 +4,33 @@ calc(_, ff, ff).
 calc(S0, id(I), V):-
     memberchk(I=V, S0).
 calc(_, num(A), A).
-calc(_, A < B, tt):-
-    calc(_, A, V1),
-    calc(_, B, V2),
+calc(S0, A < B, tt):-
+    calc(S0, A, V1),
+    calc(S0, B, V2),
     V1<V2.
-calc(_, A < B, ff):-
-    calc(_, A, V1),
-    calc(_, B, V2),
+calc(S0, A < B, ff):-
+    calc(S0, A, V1),
+    calc(S0, B, V2),
     V1>=V2.
-calc(_, A > B, tt):-
-    calc(_, A, V1),
-    calc(_, B, V2),
+calc(S0, A > B, tt):-
+    calc(S0, A, V1),
+    calc(S0, B, V2),
     V1>V2.
-calc(_, A > B, ff):-
-    calc(_, A, V1),
-    calc(_, B, V2),
+calc(S0, A > B, ff):-
+    calc(S0, A, V1),
+    calc(S0, B, V2),
     V2>=V1.
-calc(_, A + B, V):-
-    calc(_, A, V1),
-    calc(_, B, V2),
+calc(S0, A + B, V):-
+    calc(S0, A, V1),
+    calc(S0, B, V2),
     V is V1+V2.
-calc(_, A - B, V):-
-    calc(_, A, V1),
-    calc(_, B, V2),
+calc(S0, A - B, V):-
+    calc(S0, A, V1),
+    calc(S0, B, V2),
     V is V1-V2.
-calc(_, A * B, V):-
-    calc(_, A, V1),
-    calc(_, B, V2),
+calc(S0, A * B, V):-
+    calc(S0, A, V1),
+    calc(S0, B, V2),
     V is V1*V2.
 
 
