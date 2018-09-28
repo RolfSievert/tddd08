@@ -63,11 +63,11 @@ execute(S0, set(I, E), Sn) :-
     append([I=V], S0, Sn).
 
 % Executes C1 if B
-execute(S0, if(B, C1, C2), Sn):-
+execute(S0, if(B, C1, _C2), Sn):-
     calc(S0, B, tt),
     execute(S0, C1, Sn).
 % Executes C2 if not B
-execute(S0, if(B, C1, C2), Sn):-
+execute(S0, if(B, _C1, C2), Sn):-
     calc(S0, B, ff),
     execute(S0, C2, Sn).
 
