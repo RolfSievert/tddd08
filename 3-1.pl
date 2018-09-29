@@ -16,70 +16,80 @@
 %parse([A], A).
 % Remove ; if needed
 % Comparators
-comp(<).
-comp(>).
-parse([;|T], Out):-
-    parse(T, Out).
-
 % term
-parse([id(X)], id(X)).
-parse([num(X)], num(X)).
+term([id(X)], X).
+term([num(X)], num(X)).
 
 % Factor
-parse(F, Out):-
+fact(F, PTerm+PFac):-
     append(T1, Fac, F),
     append(Term, [+], T1),
-    parse(Term, PTerm),
-    parse(Fac, PFac).
+    term(Term, PTerm),
+    fact(Fac, PFac).
+fact(F, Out):-
+    term(F, Out).
 
 % Expr
-parse(E, Out):-
+expr(E, PFac*PExpr):-
     append(T, Expr, E),
     append(Fac, [*], T),
-    parse(Fac, PFac),
-    parse(Term, PTerm).
+    fact(Fac, PFac),
+    expr(Expr, PExpr).
+expr(E, Out):-
+    fact(E, Out).
 
 % Bool
-parse(Bool, P1<P2):-
+bool(Bool, P1<P2):-
     append(T, Expr2, Bool),
     append(Expr1, [<], T),
-    parse(Expr1, P1),
-    parse(Expr2, P2).
-parse(Bool, P1>P2):-
+    expr(Expr1, P1),
+    expr(Expr2, P2).
+bool(Bool, P1>P2):-
     append(T, Expr2, Bool),
     append(Expr1, [>], T),
-    parse(Expr1, P1),
-    parse(Expr2, P2).
+    expr(Expr1, P1),
+    expr(Expr2, P2).
 
 % cmd
-parse([skip], skip).
-parse(Set, set(PId, PErxpr)):-
+cmd([skip], skip).
+cmd(Set, set(PId, PExpr)):-
     append(T, Expr, Set),
     append(Id, [:=], T),
-    parse(Id, PId),
-    parse(Expr, PExpr).
-parse([if|T], if(PBool, PPgmTrue, PPgmFalse)):-
+    term(Id, PId),
+    expr(Expr, PExpr).
+cmd([if|T], if(PBool, PPgmTrue, PPgmFalse)):-
     append(T4, fi, T),
     append(T3, PgmFalse, T4),
     append(T2, [else], T3),
     append(T1, PgmTrue, T2),
     append(Bool, [then], T1),
-    parse(Bool, PBool),
-    parse(PgmTrue, PPgmTrue),
-    parse(PgmFalse, PPgmFalse).
+    bool(Bool, PBool),
+    pgm(PgmTrue, PPgmTrue),
+    pgm(PgmFalse, PPgmFalse).
+cmd([while|T], while(PBool, PPgm)):-
+    append(T2, [od], T),
+    append(T1, Pgm, T2),
+    append(Bool, [do], T1),
+    bool(Bool, PBool),
+    pgm(Pgm, PPgm).
+
 % pgm
-parse(P, seq(PCmd, PPgm)):-
+pgm(P, seq(PCmd, PPgm)):-
     append(T, Pgm, P),
     append(Cmd, [;], T),
-    parse(Cmd, PCmd),
-    parse(Pgm, PPgm).
+    cmd(Cmd, PCmd),
+    pgm(Pgm, PPgm).
+pgm(P, Out):-
+    cmd(P, Out).
 
+% parser
+parse(Tokens, AbstStx):-
+    pgm(Tokens, AbstStx).
 
-run(_In, String, Out) :-
+run(In, String, Out) :-
     scan(String, Tokens),
-    write(Tokens),
-    parse(Tokens, Out).
-%   execute(In, AbstStx, Out).
+    parse(Tokens, AbstStx),
+    execute(In, AbstStx, Out).
 % Tests
 %:-run([x=3], "y:=1; z:=0; while x>z do z:=z+1; y:=y*z od", Res).
 % Parser test
