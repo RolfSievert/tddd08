@@ -14,17 +14,11 @@
 %parse([A, -, B], A-B).
 %parse([A, +, B], A+B).
 %parse([A], A).
-app(
 parse([id(X)], id(X)).
 parse([num(X)], num(X)).
 parse(Bool, P1<P2):-
-    write(Bool),
-    nl,
-    append(Expr1, [<], T),
     append(T, Expr2, Bool),
-    write(Expr1),
-    nl,
-    write(Expr2),
+    append(Expr1, [<], T),
     parse(Expr1, P1),
     parse(Expr2, P2).
 
