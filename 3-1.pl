@@ -3,23 +3,6 @@
 % Load functors and predicates
 :-initialization([scanner, '2-3']).
 
-% Set value
-%parse([num(1), <, num(2)], Res).
-%parse([A, :=, B], set(A, B)).
-
-%%% Parse calculations
-%parse([A, <, B], A<B).
-%parse([A, >, B], A>B).
-%parse([A, *, B], A*B).
-%parse([A, -, B], A-B).
-%parse([A, +, B], A+B).
-%parse([A], A).
-% Remove ; if needed
-% Comparators
-% term
-term([id(X)], X).
-term([num(X)], num(X)).
-
 % Factor
 fact(F, PTerm+PFac):-
     append(T1, Fac, F),
