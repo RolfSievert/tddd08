@@ -45,7 +45,7 @@ cmd(Set, set(PId, PExpr)):-
     term(Id, PId),
     expr(Expr, PExpr).
 cmd([if|T], if(PBool, PPgmTrue, PPgmFalse)):-
-    append(T4, fi, T),
+    append(T4, [fi], T),
     append(T3, PgmFalse, T4),
     append(T2, [else], T3),
     append(T1, PgmTrue, T2),
