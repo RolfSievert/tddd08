@@ -3,6 +3,10 @@
 % Load functors and predicates
 :-initialization([scanner, '2-3']).
 
+% Term
+term([id(X)], X).
+term([num(X)], num(X)).
+
 % Factor
 fact(F, PTerm+PFac):-
     append(T1, Fac, F),
@@ -71,6 +75,7 @@ parse(Tokens, AbstStx):-
 
 run(In, String, Out) :-
     scan(String, Tokens),
+    write(Tokens),
     parse(Tokens, AbstStx),
     execute(In, AbstStx, Out).
 % Tests
