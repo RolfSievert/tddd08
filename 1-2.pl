@@ -11,18 +11,17 @@ path(e,g).
 path(f,g).
 
 % Halting condition, if end node is reached
-path(X,Y,Out):-
-	path(X,Y),
-	Out=[X,Y].
+path(X,Y, [X, Y]):-
+	path(X,Y).
 
 % Connects nodes recursivly
-path(X,Y,Out) :-
-	Out=[X|T],
+% If X is connected to H and a path between H and Y exists, X is connected to H
+path(X,Y,[X|T]) :-
 	path(X,H),
 	path(H,Y,T).
 
 % Connects nodes recursivly and counts distance
-npath(X,Y,Out) :-
+% Gets path L from X to Y, and a number Number which is length of L
+npath(X,Y,[Number|L]) :-
 	path(X,Y,L),
-	length(L,Number),
-	Out=[Number|L].
+	length(L,Number).
