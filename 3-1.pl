@@ -3,11 +3,11 @@
 % Load functors and predicates
 :-initialization([scanner, '2-3']).
 
-% Term
+% Term parser
 term([id(X)], X).
 term([num(X)], num(X)).
 
-% Factor
+% Factor parser
 fact(F, PTerm+PFac):-
     append(T1, Fac, F),
     append(Term, [+], T1),
@@ -16,7 +16,7 @@ fact(F, PTerm+PFac):-
 fact(F, Out):-
     term(F, Out).
 
-% Expr
+% Expression parser
 expr(E, PFac*PExpr):-
     append(T, Expr, E),
     append(Fac, [*], T),
@@ -25,7 +25,7 @@ expr(E, PFac*PExpr):-
 expr(E, Out):-
     fact(E, Out).
 
-% Bool
+% Boolean parser
 bool(Bool, P1<P2):-
     append(T, Expr2, Bool),
     append(Expr1, [<], T),
@@ -37,7 +37,7 @@ bool(Bool, P1>P2):-
     expr(Expr1, P1),
     expr(Expr2, P2).
 
-% cmd
+% Command parser
 cmd([skip], skip).
 cmd(Set, set(PId, PExpr)):-
     append(T, Expr, Set),
@@ -60,7 +60,7 @@ cmd([while|T], while(PBool, PPgm)):-
     bool(Bool, PBool),
     pgm(Pgm, PPgm).
 
-% pgm
+% Program parser
 pgm(P, seq(PCmd, PPgm)):-
     append(T, Pgm, P),
     append(Cmd, [;], T),
@@ -69,10 +69,11 @@ pgm(P, seq(PCmd, PPgm)):-
 pgm(P, Out):-
     cmd(P, Out).
 
-% parser
+% Token parser
 parse(Tokens, AbstStx):-
     pgm(Tokens, AbstStx).
 
+% Reads the input and splits it into tokens
 run(In, String, Out) :-
     scan(String, Tokens),
     write(Tokens),
