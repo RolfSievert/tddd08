@@ -1,4 +1,4 @@
-% Task 3.4
+% Task 2-4
 % Returns the union of two lists
 union([], [], U):-
     U=[].
