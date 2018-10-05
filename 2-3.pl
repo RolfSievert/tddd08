@@ -3,9 +3,6 @@
 calc(_, tt, tt).
 % return false if boolean is false
 calc(_, ff, ff).
-% Check if X has an assigned value in S0 and return that value
-calc(S0, X, V):-
-    memberchk(X=V, S0).
 % Check if I has an assigned value in S0 and return that value
 calc(S0, id(I), V):-
     memberchk(I=V, S0).
