@@ -4,7 +4,7 @@
 :-initialization([scanner, '2-3']).
 
 % Term parser
-term([id(X)], X).
+term([id(X)], id(X)).
 term([num(X)], num(X)).
 
 % Factor parser
@@ -37,12 +37,15 @@ bool(Bool, P1>P2):-
     expr(Expr1, P1),
     expr(Expr2, P2).
 
+% Parse id of setter
+set([id(X)], X).
+
 % Command parser
 cmd([skip], skip).
 cmd(Set, set(PId, PExpr)):-
     append(T, Expr, Set),
     append(Id, [:=], T),
-    term(Id, PId),
+    set(Id, PId),
     expr(Expr, PExpr).
 cmd([if|T], if(PBool, PPgmTrue, PPgmFalse)):-
     append(T4, [fi], T),
@@ -76,7 +79,6 @@ parse(Tokens, AbstStx):-
 % Reads the input and splits it into tokens
 run(In, String, Out) :-
     scan(String, Tokens),
-    write(Tokens),
     parse(Tokens, AbstStx),
     execute(In, AbstStx, Out).
 % Tests
