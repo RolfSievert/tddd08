@@ -24,10 +24,9 @@ not_outnumbered(R):-
 % Creates a list of neighbour states to a given state
 get_neighbours([R1, Boat, R2, Side], Neighbours).
 
-% Checks if an element is in list
+% Checks if an element is in set
 in_graph([Elem|L], Elem).
 in_graph([H|L], Elem):-
-    H\=Elem,
     in_graph(L, Elem).
 
 % Maybe pass condition that element cant already be in list? Insert unique only?
@@ -38,17 +37,21 @@ insert(Elem, [H|T], L).
 create_graph([R1, Boat, R2, Side], Graph):-
     get_neighbours([R1, Boat, R2, Side], Neighbours),
     insert([R1, Boat, R2, Side], Neighbours, G1),
-    append(G1, G2, Graph),
+    append(G1, G2, Graph).
     % Create graph for all neighbours
-    create_graph(
 
 
 %%%%%% Functors for search
 % True if N1 and N2 are directly connected
-connected(Graph, N1, N2).
+connected(Graph, N1, N2):-
+    in_graph(Graph, [N1, N2]).
 % Returns all directly connected nodes to Node
-neighbours(Graph, Node, Neighbours).
+neighbours(Graph, Node, Neighbours):-
+    findall([Node, X], in_graph(Graph, [Node, X]), Neighbours).
 % Breadth first algorithm
-breadth_first(Graph, Start, Goal, Path).
+depth_first(Graph, Goal, Goal, [Goal]).
+depth_first(Graph, Start, Goal, [Start|Path]):-
+    connected(Graph, Start, X),
+    depth_first(Graph, X, Goal, Path).
 
 % Data = [c, c, c, m, m, m]
