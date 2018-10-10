@@ -1,7 +1,7 @@
 % excersice 4.1
 
 %%%%% Functors for building graph
-% Returns number of missionaries in list M
+% Returns all missionaries in list M
 missionaries([], []).
 missionaries([m|T], [m|C]):-
     missionaries(T, C).
@@ -21,9 +21,6 @@ not_outnumbered(R):-
     length(R, L),
     2*M>=L.
 
-% Creates a list of neighbour states to a given state
-get_neighbours([R1, Boat, R2, Side], Neighbours).
-
 % Checks if an element is in set
 in_graph([Elem|L], Elem).
 in_graph([H|L], Elem):-
@@ -41,6 +38,46 @@ create_graph([R1, Boat, R2, Side], Graph):-
     % Create graph for all neighbours
 
 
+% New test
+contains_cannibal([c|T]).
+contains_cannibal([m|T]):-
+    contains_cannibal(T).
+contains_missionary([m|T]).
+contains_missionary([c|T]):-
+    contains_cannibal(T).
+remove_cannibal([c|T], T).
+remove_cannibal([m|T], [m|Out]):-
+    remove_cannibal(T, Out).
+remove_missionary([m|T], T).
+remove_missionary([c|T], [c|Out]):-
+    remove_missionary(T, Out).
+add_cannibal(L, [c|L]).
+add_missionary(L, [m|L]).
+boat_full(Boat):-
+    length(Boat, 2).
+
+load_boat([R1, Boat, R2, l], [R1Out, BoatOut, R2Out, l]):-
+    \+boat_full(Boat),
+    contains_cannibal(R1),
+    remove_cannibal(R1, R1Out),
+    add_cannibal(Boat, BoatOut).
+load_boat([R1, Boat, R2, l], [R1Out, BoatOut, R2Out, l]):-
+    \+boat_full(Boat),
+    contains_missionary(R1),
+    remove_missionary(R1, R1Out),
+    add_missionary(Boat, BoatOut).
+
+move_boat([R1, Boat, R2, l], [R1, Boat, R2, r]):-
+    \+length(Boat, 0).
+move_boat([R1, Boat, R2, r], [R1, Boat, R2, l]):-
+    \+length(Boat, 0).
+move_people([R1, Boat, R2, l], State):-
+
+
+ok_state([R1, Boat, R2, Side]):-
+    not_outnumbered(R1),
+    not_outnumbered(R2).
+
 %%%%%% Functors for search
 % True if N1 and N2 are directly connected
 connected(Graph, N1, N2):-
@@ -49,6 +86,7 @@ connected(Graph, N1, N2):-
 neighbours(Graph, Node, Neighbours):-
     findall([Node, X], in_graph(Graph, [Node, X]), Neighbours).
 % Breadth first algorithm
+% TODO: add visited list
 depth_first(Graph, Goal, Goal, [Goal]).
 depth_first(Graph, Start, Goal, [Start|Path]):-
     connected(Graph, Start, X),
