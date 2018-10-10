@@ -85,3 +85,4 @@ run(In, String, Out) :-
 %:-run([x=3], "y:=1; z:=0; while x>z do z:=z+1; y:=y*z od", Res).
 % Parser test
 %parse([num(1), <, num(2)], Res).
+
