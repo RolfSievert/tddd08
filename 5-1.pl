@@ -3,8 +3,8 @@
 :- use_module(library(clpfd)).
 
 % Define dynamic predicates
-dynamic on/2.
-dynamic container/3.
+:- dynamic(on/2).
+:- dynamic(container/3).
 
 on(a,d).
 on(b,c).
@@ -15,38 +15,27 @@ container(b,4,1).
 container(c,2,2).
 container(d,1,1).
 
-earliest_start(Box, Time):-
-    \+on(_, Box),
-    container(Box, _, Time).
-earliest_start(Box, Time):-
+create_task(Box, task(Start, Duration, _, Cost, Box)):-
     on(X, Box),
-    container(X, _, D),
-    Time #= D + T,
-    earliest_start(X, T).
-
-schedule(Starts) :-
-        Starts = [S1,S2,S3,S4],
-        Tasks = [task(S1,2,_,2,a),
-                 task(S2,1,_,4,b),
-                 task(S3,2,_,2,c),
-                 task(S4,1,_,1,d)],
-        %Starts ins 0..10,
-        cumulative(Tasks, [limit(4)]),
-        label(Starts).
-    
-
-
-%problem(1, ([container(a,2,2),
-%             container(b,4,1),
-%             container(c,2,2),
-%             container(d,1,1)]).
-
-
-
-
-unload_box(Box) :-
+    container(X, XR, XD),
+    container(Box, M, Duration),
+    create_task(X, task(_, XD, XE, XR, X)),
+    unload_box(Box),
+    Cost#=M*Duration,
+    Start #> XE.
+create_task(Box, task(_, Duration, _, Resources, Box)):-
     \+on(_, Box),
-    retract(on(Box, _),
-    retract(container(Box, _, _)).
+    unload_box(Box),
+    container(Box, Resources, Duration).
+
+schedule(Tasks):-
+    container(Box, _, _),
+    findall(Task, create_task(Box, Task), Tasks),
+    cumulative(Tasks, [limit(10)]).
+
+unload_box(Box):-
+    \+on(_, Box).
+%retract(on(Box, _)).
+    %retract(container(Box, _, _)).
 
 
