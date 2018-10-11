@@ -17,9 +17,9 @@ container(d,1,1).
 
 create_task(Box, task(Start, Duration, _, Cost, Box)):-
     on(X, Box),
-    container(X, XR, XD),
+    container(X, _, _),
     container(Box, M, Duration),
-    create_task(X, task(_, XD, XE, XR, X)),
+    create_task(X, task(_, _, XE, _, X)),
     unload_box(Box),
     Cost#=M*Duration,
     Start #> XE.

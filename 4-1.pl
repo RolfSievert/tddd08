@@ -63,17 +63,12 @@ dfs([Curr|Visited], Goal):-
 % BFS
 % Goals
 bfs(Goal) :-
-    bfs([[3, 3, 0, 0, left]], Goal).
-bfs([[[0, 0, 3, 3, right]|Visited]|_], [[0, 0, 3, 3, right]|Visited]).
+    bfs([[3, 3, 0, 0, left]], _, Goal).
+bfs([[0, 0, 3, 3, right]|Visited], _,  [[0, 0, 3, 3, right]|Visited]).
 
 % Breadth traversal
-bfs([[Curr|Visited]|Brs], Path, Goal) :-
-    findall(Next, next(Curr, [Curr|Visited], Next), PossNext),
-    
-
-
-
-
-
-
+bfs([Curr|Visited], CurrFrontier, Goal) :-
+    findall(TestState, next(Curr, [Curr|Visited], TestState), PossNext),
+    append(CurrFrontier, PossNext, [Front|NextFrontier]),
+    bfs([Front, Curr|Visited], NextFrontier, Goal).
 
