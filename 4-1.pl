@@ -50,25 +50,26 @@ next([ML, CL, MR, CR, right], Visited, NextState) :-
 	not_member(NextState, Visited).
 
 % DFS
-% Goals
+% Start
 dfs(Goal) :-
     dfs([[3, 3, 0, 0, left]], Goal).
-dfs([[0, 0, 3, 3, right]|Visited], [[0, 0, 3, 3, right]|Visited]).
 
 % Depth traversal
+dfs([[0, 0, 3, 3, right]|Visited], [[0, 0, 3, 3, right]|Visited]).
 dfs([Curr|Visited], Goal):-
     next(Curr, [Curr|Visited], Next),
     dfs([Next, Curr|Visited], Goal).
 
 % BFS
-% Goals
+% Start
 bfs(Goal) :-
     bfs([[3, 3, 0, 0, left]], _, Goal).
-bfs([[0, 0, 3, 3, right]|Visited], _,  [[0, 0, 3, 3, right]|Visited]).
 
 % Breadth traversal
+bfs([[0, 0, 3, 3, right]|Visited], _,  [[0, 0, 3, 3, right]|Visited]).
 bfs([Curr|Visited], CurrFrontier, Goal) :-
-    findall(TestState, next(Curr, [Curr|Visited], TestState), PossNext),
+    \+Curr = [],
+    findall([TestState, Curr|Visited], next(Curr, [Curr|Visited], TestState), PossNext),
     append(CurrFrontier, PossNext, [Front|NextFrontier]),
-    bfs([Front, Curr|Visited], NextFrontier, Goal).
+    bfs(Front, NextFrontier, Goal).
 
