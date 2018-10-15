@@ -10,32 +10,39 @@ on(a,d).
 on(b,c).
 on(c,d).
 
+% B, M, D
 container(a,2,2).
 container(b,4,1).
 container(c,2,2).
 container(d,1,1).
 
-create_task(Box, task(Start, Duration, _, Cost, Box)):-
-    on(X, Box),
-    container(X, XR, XD),
-    container(Box, M, Duration),
-    create_task(X, task(_, XD, XE, XR, X)),
-    unload_box(Box),
-    Cost#=M*Duration,
-    Start #> XE.
-create_task(Box, task(_, Duration, _, Resources, Box)):-
-    \+on(_, Box),
-    unload_box(Box),
-    container(Box, Resources, Duration).
+create_tasks([], _, []).
+create_tasks([Box|Boxes], End, Tasks):-
+    create_tasks(Boxes, End, T2),
+    create_task(Box, End, T1),
+    append(T1, T2, Tasks).
 
+create_task(Box, _, []):-
+    on(_, Box).
+create_task(Box, E, [task(Start, Duration, End, Resources, Box)|Tasks]):-
+    \+on(_, Box),
+    container(Box, Resources, Duration),
+    Start #>= E,
+    findall(X, on(Box, X), Boxes),
+    unload_box(Box),
+    create_tasks(Boxes, End, Tasks).
+    
 schedule(Tasks):-
-    container(Box, _, _),
-    findall(Task, create_task(Box, Task), Tasks),
-    cumulative(Tasks, [limit(10)]).
+    % Unloadable boxes
+    findall(X, \+on(_, X), Boxes),
+    create_tasks(Boxes, 0, Tasks).
+%cumulative(Tasks, [limit(10)]).
 
 unload_box(Box):-
-    \+on(_, Box).
-%retract(on(Box, _)).
-    %retract(container(Box, _, _)).
+    \+on(Box, _).
+unload_box(Box):-
+    on(Box, _),
+    retract(on(Box, _)).
+%retract(container(Box, _, _)).
 
 
