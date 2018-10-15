@@ -23,20 +23,25 @@ create_tasks([Box|Boxes], End, Tasks):-
     append(T1, T2, Tasks).
 
 create_task(Box, _, []):-
+    container(Box, _, _),
     on(_, Box).
 create_task(Box, E, [task(Start, Duration, End, Resources, Box)|Tasks]):-
-    \+on(_, Box),
     container(Box, Resources, Duration),
+    \+on(_, Box),
     Start #>= E,
     findall(X, on(Box, X), Boxes),
     unload_box(Box),
     create_tasks(Boxes, End, Tasks).
     
+on_top(Box):-
+    container(Box, _, _),
+    \+on(_, Box).
+
 schedule(Tasks):-
     % Unloadable boxes
-    findall(X, \+on(_, X), Boxes),
-    create_tasks(Boxes, 0, Tasks).
-%cumulative(Tasks, [limit(10)]).
+    findall(X, on_top(X), Boxes),
+    create_tasks(Boxes, 0, Tasks),
+    cumulative(Tasks, [limit(10)]).
 
 unload_box(Box):-
     \+on(Box, _).
