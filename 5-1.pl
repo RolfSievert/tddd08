@@ -70,11 +70,19 @@ make_tasks([S|Starts], [E|Ends], [[_, W, D]|Containers], [T|Tasks]) :-
 	T = task(S, D, E, W, 0),
 	make_tasks(Starts, Ends, Containers, Tasks).
 
+% Prints the results nicely
+print(TotCost, Workers, TimeCost, Starts, Ends) :-
+    write('The tasks will start at the folliowing times:   '), write(Starts), nl,
+    write('And they will end at the following times:       '), write(Ends), nl,
+    write('It will take '), write(Workers), write(' workers '),
+    write(TimeCost), write(' time units to unload the containers'), nl,
+    write('This results in a total cost of '), write(TotCost), fail. 
+
 % Schedules all the tasks and returns total cost, number of workers and cost in time
-schedule(TotCost, Workers, TimeCost, Starts, Ends) :-
+schedule(_) :-
 	findall([C, W, D], container(C, W, D), Containers),
 	
-    % Makes lists for starting times and ending times
+    % Makes lists for starting times and ending times the same length
     length(Containers, N),
 	length(Starts, N),
 	length(Ends, N),
@@ -95,4 +103,5 @@ schedule(TotCost, Workers, TimeCost, Starts, Ends) :-
 	% Parses the containers into tasks and feeds them to the cumulative function to minimize based on TotCost.
 	make_tasks(Starts, Ends, Containers, Tasks),
 	cumulative(Tasks, [limit(Workers)]),
-	labeling([minimize(TotCost)], [TotCost|Starts]).
+	labeling([minimize(TotCost)], [TotCost|Starts]),
+    print(TotCost, Workers, TimeCost, Starts, Ends).
