@@ -58,7 +58,9 @@ dfs(Goal) :-
 dfs([[0, 0, 3, 3, right]|Visited], [[0, 0, 3, 3, right]|Visited]).
 dfs([Curr|Visited], Goal):-
     next(Curr, [Curr|Visited], Next),
-    dfs([Next, Curr|Visited], Goal).
+    dfs([Next, Curr|Visited], Goal),
+    length(Goal, L),
+    write(L).
 
 % BFS, breadth first search
 % Start
@@ -67,13 +69,9 @@ bfs(Path) :-
     length(Path, L),
     write(L).
 
-% Breadth traversal
-%bfs(Visited, [[0, 0, 3, 3, right]|_],  [[0, 0, 3, 3, right]|Visited]).
-%bfs(Visited, [CurrState|CurrFrontier], Path):-
-%    findall(Neighbour, next(CurrState, [CurrState|Visited], Neighbour), Neighbours),
-%    append(CurrFrontier, Neighbours, NextFrontier),
-%    bfs([CurrState|Visited], NextFrontier, Path).
+% Halting case
 bfs([[[0, 0, 3, 3, right]|Path]|_], [[0, 0, 3, 3, right]|Path]).
+% Takes a list of paths, where Curr is the front to be explored
 bfs([[Curr|Visited]|Paths], FinalPath):-
     findall(Neighbour, next(Curr, [Curr|Visited], Neighbour), Neighbours),
     expand([Curr|Visited], Neighbours, NewPaths),
