@@ -58,16 +58,12 @@ dfs(Goal) :-
 dfs([[0, 0, 3, 3, right]|Visited], [[0, 0, 3, 3, right]|Visited]).
 dfs([Curr|Visited], Goal):-
     next(Curr, [Curr|Visited], Next),
-    dfs([Next, Curr|Visited], Goal),
-    length(Goal, L),
-    write(L).
+    dfs([Next, Curr|Visited], Goal).
 
 % BFS, breadth first search
 % Start
 bfs(Path) :-
-    bfs([[[3, 3, 0, 0, left]]], Path),
-    length(Path, L),
-    write(L).
+    bfs([[[3, 3, 0, 0, left]]], Path).
 
 % Halting case
 bfs([[[0, 0, 3, 3, right]|Path]|_], [[0, 0, 3, 3, right]|Path]).
