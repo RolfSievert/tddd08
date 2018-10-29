@@ -66,7 +66,7 @@ bfs(Path) :-
     bfs([], [[3, 3, 0, 0, left]], Path).
 
 % Breadth traversal
-bfs(_, [[0, 0, 3, 3, right]|_],  [[0, 0, 3, 3, right]|Visited]).
+bfs(Visited, [[0, 0, 3, 3, right]|_],  [[0, 0, 3, 3, right]|Visited]).
 bfs(Visited, [CurrState|CurrFrontier], Path):-
     findall(Neighbour, next(CurrState, [CurrState|Visited], Neighbour), Neighbours),
     append(CurrFrontier, Neighbours, NextFrontier),
