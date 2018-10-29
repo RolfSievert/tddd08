@@ -63,12 +63,21 @@ dfs([Curr|Visited], Goal):-
 % BFS, breadth first search
 % Start
 bfs(Path) :-
-    bfs([], [[3, 3, 0, 0, left]], Path).
+    bfs([[3, 3, 0, 0, left]], Path).
 
 % Breadth traversal
-bfs(Visited, [[0, 0, 3, 3, right]|_],  [[0, 0, 3, 3, right]|Visited]).
-bfs(Visited, [CurrState|CurrFrontier], Path):-
-    findall(Neighbour, next(CurrState, [CurrState|Visited], Neighbour), Neighbours),
-    append(CurrFrontier, Neighbours, NextFrontier),
-    bfs([CurrState|Visited], NextFrontier, Path).
+%bfs(Visited, [[0, 0, 3, 3, right]|_],  [[0, 0, 3, 3, right]|Visited]).
+%bfs(Visited, [CurrState|CurrFrontier], Path):-
+%    findall(Neighbour, next(CurrState, [CurrState|Visited], Neighbour), Neighbours),
+%    append(CurrFrontier, Neighbours, NextFrontier),
+%    bfs([CurrState|Visited], NextFrontier, Path).
+bfs([[[0, 0, 3, 3, right]|Path]|_], [[0, 0, 3, 3, right]|Path]).
+bfs([[Curr|Visited]|Paths], FinalPath):-
+    findall(Neighbour, next(Curr, [Curr|Visited], Neighbour), Neighbours),
+    expand([Curr|Visited], Neighbours, NewPaths),
+    append(Paths, NewPaths, NextFrontier),
+    bfs(NextFrontier, FinalPath).
 
+% Adds all members of L2 to first of L1 and puts these lists in L3.
+expand(L1, L2, L3):-
+    findall([X|L1], member(X, L2), L3).
