@@ -63,7 +63,9 @@ dfs([Curr|Visited], Goal):-
 % BFS, breadth first search
 % Start
 bfs(Path) :-
-    bfs([[[3, 3, 0, 0, left]]], Path).
+    bfs([[[3, 3, 0, 0, left]]], Path),
+    length(Path, L),
+    write(L).
 
 % Breadth traversal
 %bfs(Visited, [[0, 0, 3, 3, right]|_],  [[0, 0, 3, 3, right]|Visited]).
